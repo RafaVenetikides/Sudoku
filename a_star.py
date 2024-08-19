@@ -1,9 +1,21 @@
-import json, codecs
 from DFS import show_game, list_moves
 import numpy as np
 import time
 from memory_profiler import memory_usage
-from greedy import fetch_game, get_distances, get_min_position, get_state
+from greedy import fetch_game, get_distances, get_min_position
+
+def get_state(game_state: list) -> tuple:
+    # Defines the h value for that game state and saves it in a tuple for inseartion in the list
+
+    h = 0
+    for i in game:
+        for j in i:
+            if j == 0:
+                h += 1
+
+
+
+    return [game, h]
 
 def get_fn(game: np.array) -> tuple:
     # Gets the game state and it's "h" value
