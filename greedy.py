@@ -75,26 +75,26 @@ def greedy_solve(game: np.array, game_states: list) -> np.array:
     return game
 
 
-game = fetch_game('game2.json')
+# game = fetch_game('game2.json')
 
-show_game(game)
+# show_game(game)
 
-game_states = list()
+# game_states = list()
 
-print("\n \n")
+# print("\n \n")
 
-start_mem = memory_usage()[0]
-start_time = time.time()
+# start_mem = memory_usage()[0]
+# start_time = time.time()
 
-greedy_solution = greedy_solve(game, game_states)
+# greedy_solution = greedy_solve(game, game_states)
 
-if greedy_solution is not None:
-    show_game(greedy_solution)
-else:
-    print("Game has no solution")
+# if greedy_solution is not None:
+#     show_game(greedy_solution)
+# else:
+#     print("Game has no solution")
 
-solve_time = time.time() - start_time
-memory_usage = memory_usage()[0] - start_mem
+# solve_time = time.time() - start_time
+# memory_usage = memory_usage()[0] - start_mem
 
-print(f'Solve time: {(solve_time * 1000):.4f} ms')
-print(f'Memory used: {memory_usage:.4f} MB')
+# print(f'Solve time: {(solve_time * 1000):.4f} ms')
+# print(f'Memory used: {memory_usage:.4f} MB')

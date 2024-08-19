@@ -4,8 +4,8 @@ import time
 from memory_profiler import memory_usage
 from greedy import fetch_game, get_distances, get_min_position
 
-def get_state(game_state: list) -> tuple:
-    # Defines the h value for that game state and saves it in a tuple for inseartion in the list
+def get_h(game: np.array) -> int:
+    # Defines the h value (distance to the end) for that game state
 
     h = 0
     for i in game:
@@ -13,17 +13,21 @@ def get_state(game_state: list) -> tuple:
             if j == 0:
                 h += 1
 
+    return h
 
+def get_fn(game_state: list, attempts: int) -> list:
+    """ Creates a new list with:
+       game_state[0] = game
+       game_state[1] = h (distance to the end)
+       game_state[2] = g (distance traveled)
+       game_state[3] = f (h + g)
+    """
 
-    return [game, h]
+    game_state[1] = get_h(game_state[0])
+    game_state[2] = attempts
+    game_state[3] = game_state[1] + game_state[2]
 
-def get_fn(game: np.array) -> tuple:
-    # Gets the game state and it's "h" value
-    state = get_state(game)
-
-    # TODO: add the numbers of moves it took to get to that state
-    fn_state = (state[0], state[1] + 1)
-    return fn_state
+    return game_state
 
 game = fetch_game('game.json')
 
@@ -31,26 +35,33 @@ def a_star_solve(game: np.array) -> np.array:
     distances = get_distances(game)
     game_states = list()
 
+    state = [game, get_h(game), 0, get_h(game)]
+
+    game_states.append(state)
+
     while 0 in game:
         #Gets the play position
         play_position = get_min_position(distances)
 
-        for i in list_moves(game, play_position[0], play_position[1]):
+        attempts = 0
+        for i in list_moves(state[0], play_position[0], play_position[1]):
+            attempts += 1
+
             #Play the possible moves in that position
-            game[play_position[0]][play_position[1]] = i
+            state[0][play_position[0]][play_position[1]] = i
 
             # Inserts the value in the list and sorts it by its f(n) value
-            game_states.append(get_fn(game))
-            game_states.sort(key=lambda x: x[1])
+            game_states.append(get_fn(state, attempts))
+            game_states.sort(key=lambda x: x[3])
 
-            if a_star_solve(game) is not None:
+            if a_star_solve(state[0]) is not None:
                 # Gets the game state with the lowest h found
                 return game_states[0][0]
             
-            game[play_position[0]][play_position[1]] = 0
+            state[0][play_position[0]][play_position[1]] = 0
         # If no moves are available in that spot, returns None
         return None
-    return game
+    return state[0]
 
 game = fetch_game('game.json')
 
