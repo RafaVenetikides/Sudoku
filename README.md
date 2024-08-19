@@ -1,3 +1,3 @@
-#Search algorithms for sudoku games
+Search algorithms for sudoku games
 
 description TBA
